@@ -3,26 +3,26 @@
     <type>org.netbeans.modules.j2ee.earproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2ee-earproject/2">
-            <name>GuraSoftApps</name>
+            <name>GurasoftApps</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries/>
             <web-module-additional-libraries>
                 <library>
-                    <file>${reference.GuraSoftApps-war.dist-ear}</file>
+                    <file>${reference.GurasoftApps-war.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.GuraSoftApps-ejb.dist-ear}</file>
+                    <file>${reference.GurasoftApps-ejb.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>
         </data>
         <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
-            <definitions>.\lib\nblibraries.properties</definitions>
+            <definitions>.\nblibraries.properties</definitions>
         </libraries>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>GuraSoftApps-ejb</foreign-project>
+                <foreign-project>GurasoftApps-ejb</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>
@@ -30,7 +30,7 @@
                 <id>dist-ear</id>
             </reference>
             <reference>
-                <foreign-project>GuraSoftApps-war</foreign-project>
+                <foreign-project>GurasoftApps-war</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>
