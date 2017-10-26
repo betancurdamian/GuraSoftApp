@@ -26,13 +26,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Ariel
  */
 @Entity
-@Table(name = "tipo_usuario", catalog = "gurasoft", schema = "")
+@Table(name = "catalogo_articulo", catalog = "gurasoft", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipoUsuario.findAll", query = "SELECT t FROM TipoUsuario t"),
-    @NamedQuery(name = "TipoUsuario.findById", query = "SELECT t FROM TipoUsuario t WHERE t.id = :id"),
-    @NamedQuery(name = "TipoUsuario.findByDescripcion", query = "SELECT t FROM TipoUsuario t WHERE t.descripcion = :descripcion")})
-public class TipoUsuario implements Serializable {
+    @NamedQuery(name = "CatalogoArticulo.findAll", query = "SELECT c FROM CatalogoArticulo c"),
+    @NamedQuery(name = "CatalogoArticulo.findById", query = "SELECT c FROM CatalogoArticulo c WHERE c.id = :id"),
+    @NamedQuery(name = "CatalogoArticulo.findByDescripcion", query = "SELECT c FROM CatalogoArticulo c WHERE c.descripcion = :descripcion")})
+public class CatalogoArticulo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,13 +43,15 @@ public class TipoUsuario implements Serializable {
     @Size(max = 255)
     @Column(name = "descripcion", length = 255)
     private String descripcion;
-    @OneToMany(mappedBy = "idtipoUsuario", fetch = FetchType.LAZY)
-    private List<Usuario> usuarioList;
+    @OneToMany(mappedBy = "uncatalogoId", fetch = FetchType.LAZY)
+    private List<CategoriaCatalogo> categoriaCatalogoList;
+    @OneToMany(mappedBy = "catalogoId", fetch = FetchType.LAZY)
+    private List<Empresa> empresaList;
 
-    public TipoUsuario() {
+    public CatalogoArticulo() {
     }
 
-    public TipoUsuario(Long id) {
+    public CatalogoArticulo(Long id) {
         this.id = id;
     }
 
@@ -70,12 +72,21 @@ public class TipoUsuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
+    public List<CategoriaCatalogo> getCategoriaCatalogoList() {
+        return categoriaCatalogoList;
     }
 
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
+    public void setCategoriaCatalogoList(List<CategoriaCatalogo> categoriaCatalogoList) {
+        this.categoriaCatalogoList = categoriaCatalogoList;
+    }
+
+    @XmlTransient
+    public List<Empresa> getEmpresaList() {
+        return empresaList;
+    }
+
+    public void setEmpresaList(List<Empresa> empresaList) {
+        this.empresaList = empresaList;
     }
 
     @Override
@@ -88,10 +99,10 @@ public class TipoUsuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoUsuario)) {
+        if (!(object instanceof CatalogoArticulo)) {
             return false;
         }
-        TipoUsuario other = (TipoUsuario) object;
+        CatalogoArticulo other = (CatalogoArticulo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -100,7 +111,7 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.TipoUsuario[ id=" + id + " ]";
+        return "entidades.CatalogoArticulo[ id=" + id + " ]";
     }
     
 }

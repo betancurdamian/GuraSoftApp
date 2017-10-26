@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Ariel
  */
 @Entity
-@Table(name = "usuario", catalog = "gurasoft", schema = "")
+@Table(name = "categoria_catalogo", catalog = "gurasoft", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
-    @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave"),
-    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")})
-public class Usuario implements Serializable {
+    @NamedQuery(name = "CategoriaCatalogo.findAll", query = "SELECT c FROM CategoriaCatalogo c"),
+    @NamedQuery(name = "CategoriaCatalogo.findById", query = "SELECT c FROM CategoriaCatalogo c WHERE c.id = :id"),
+    @NamedQuery(name = "CategoriaCatalogo.findByDescripcion", query = "SELECT c FROM CategoriaCatalogo c WHERE c.descripcion = :descripcion")})
+public class CategoriaCatalogo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,21 +43,18 @@ public class Usuario implements Serializable {
     @Column(name = "ID", nullable = false)
     private Long id;
     @Size(max = 255)
-    @Column(name = "clave", length = 255)
-    private String clave;
-    @Size(max = 255)
-    @Column(name = "nombre", length = 255)
-    private String nombre;
-    @OneToMany(mappedBy = "unusuarioId", fetch = FetchType.LAZY)
-    private List<Persona> personaList;
-    @JoinColumn(name = "id_tipoUsuario", referencedColumnName = "ID")
+    @Column(name = "descripcion", length = 255)
+    private String descripcion;
+    @JoinColumn(name = "UNCATALOGO_ID", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private TipoUsuario idtipoUsuario;
+    private CatalogoArticulo uncatalogoId;
+    @OneToMany(mappedBy = "uncategoriadecatalogoId", fetch = FetchType.LAZY)
+    private List<Articulo> articuloList;
 
-    public Usuario() {
+    public CategoriaCatalogo() {
     }
 
-    public Usuario(Long id) {
+    public CategoriaCatalogo(Long id) {
         this.id = id;
     }
 
@@ -70,37 +66,29 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public String getClave() {
-        return clave;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setClave(String clave) {
-        this.clave = clave;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getNombre() {
-        return nombre;
+    public CatalogoArticulo getUncatalogoId() {
+        return uncatalogoId;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUncatalogoId(CatalogoArticulo uncatalogoId) {
+        this.uncatalogoId = uncatalogoId;
     }
 
     @XmlTransient
-    public List<Persona> getPersonaList() {
-        return personaList;
+    public List<Articulo> getArticuloList() {
+        return articuloList;
     }
 
-    public void setPersonaList(List<Persona> personaList) {
-        this.personaList = personaList;
-    }
-
-    public TipoUsuario getIdtipoUsuario() {
-        return idtipoUsuario;
-    }
-
-    public void setIdtipoUsuario(TipoUsuario idtipoUsuario) {
-        this.idtipoUsuario = idtipoUsuario;
+    public void setArticuloList(List<Articulo> articuloList) {
+        this.articuloList = articuloList;
     }
 
     @Override
@@ -113,10 +101,10 @@ public class Usuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
+        if (!(object instanceof CategoriaCatalogo)) {
             return false;
         }
-        Usuario other = (Usuario) object;
+        CategoriaCatalogo other = (CategoriaCatalogo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -125,7 +113,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Usuario[ id=" + id + " ]";
+        return "entidades.CategoriaCatalogo[ id=" + id + " ]";
     }
     
 }

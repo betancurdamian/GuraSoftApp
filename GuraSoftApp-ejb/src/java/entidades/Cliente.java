@@ -5,10 +5,17 @@
  */
 package entidades;
 
-import javax.persistence.Column;
+import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -16,10 +23,10 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @DiscriminatorValue(value = "CLIENTE")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Cliente.findByType", query = "SELECT c FROM Cliente c WHERE c.tipocliente = :type")})
 public class Cliente extends Persona {
-
-    @Column(name = "cuitCuil")
-    private String cuitCuil;
 
     @ManyToOne
     private CuentaCorriente cuentaCorriente;
@@ -27,32 +34,49 @@ public class Cliente extends Persona {
     @ManyToOne
     private TipoCliente tipocliente;
 
-    @ManyToOne
-    private Empresa unaEmpresa;
+    @OneToMany(mappedBy = "clienteId", fetch = FetchType.LAZY)
+    private List<Venta> ventaList;
+    
+    @JoinColumn(name = "CUENTACORRIENTE_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CuentaCorriente cuentacorrienteId;
 
-    public String getCuitCuil() {
-        return cuitCuil;
+    @JoinColumn(name = "TIPOCLIENTE_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TipoCliente tipoclienteId;
+    
+    
+    @XmlTransient
+    public List<Venta> getVentaList() {
+        return ventaList;
     }
 
-    public void setCuitCuil(String cuitCuil) {
-        this.cuitCuil = cuitCuil;
+    public void setVentaList(List<Venta> ventaList) {
+        this.ventaList = ventaList;
     }
 
-    public Cliente(String cuit) {
-        super();
-        this.cuitCuil = cuit;
+    public CuentaCorriente getCuentacorrienteId() {
+        return cuentacorrienteId;
     }
 
-    public Cliente() {
-        super();
+    public void setCuentacorrienteId(CuentaCorriente cuentacorrienteId) {
+        this.cuentacorrienteId = cuentacorrienteId;
+    }
+    
+    public TipoCliente getTipoclienteId() {
+        return tipoclienteId;
+    }
+
+    public void setTipoclienteId(TipoCliente tipoclienteId) {
+        this.tipoclienteId = tipoclienteId;
     }
 
     public CuentaCorriente getCuentaCorriente() {
         return cuentaCorriente;
     }
 
-    public void setCuentaCorriente(CuentaCorriente unaCuentaCorriente) {
-        this.cuentaCorriente = unaCuentaCorriente;
+    public void setCuentaCorriente(CuentaCorriente cuentaCorriente) {
+        this.cuentaCorriente = cuentaCorriente;
     }
 
     public TipoCliente getTipocliente() {
@@ -63,12 +87,5 @@ public class Cliente extends Persona {
         this.tipocliente = tipocliente;
     }
 
-    public Empresa getUnaEmpresa() {
-        return unaEmpresa;
-    }
-
-    public void setUnaEmpresa(Empresa unaEmpresa) {
-        this.unaEmpresa = unaEmpresa;
-    }
-
+    
 }

@@ -6,36 +6,64 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Ariel
  */
 @Entity
-@Table(name = "LOCALIDAD")
+@Table(name = "localidad", catalog = "gurasoft", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Localidad.findAll", query = "SELECT l FROM Localidad l"),
+    @NamedQuery(name = "Localidad.findById", query = "SELECT l FROM Localidad l WHERE l.id = :id"),
+    @NamedQuery(name = "Localidad.findByCodigoPostal", query = "SELECT l FROM Localidad l WHERE l.codigoPostal = :codigoPostal"),
+    @NamedQuery(name = "Localidad.findByNombre", query = "SELECT l FROM Localidad l WHERE l.nombre = :nombre")})
 public class Localidad implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID", nullable = false)
     private Long id;
-
-    @Column(name = "nombre")
-    private String nombre;
-
-    @Column(name = "codigoPostal")
+    @Size(max = 255)
+    @Column(name = "codigoPostal", length = 255)
     private String codigoPostal;
+    @Size(max = 255)
+    @Column(name = "nombre", length = 255)
+    private String nombre;
+    @ManyToMany(mappedBy = "localidadList", fetch = FetchType.LAZY)
+    private List<Provincia> provinciaList;
+    @OneToMany(mappedBy = "localidadId", fetch = FetchType.LAZY)
+    private List<Direccion> direccionList;
+    @JoinColumn(name = "PROVINCIA_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Provincia provinciaId;
 
-    //Provincia a la que pertenece la Localidad
-    @ManyToOne
-    private Provincia provincia;
+    public Localidad() {
+    }
+
+    public Localidad(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -43,6 +71,48 @@ public class Localidad implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @XmlTransient
+    public List<Provincia> getProvinciaList() {
+        return provinciaList;
+    }
+
+    public void setProvinciaList(List<Provincia> provinciaList) {
+        this.provinciaList = provinciaList;
+    }
+
+    @XmlTransient
+    public List<Direccion> getDireccionList() {
+        return direccionList;
+    }
+
+    public void setDireccionList(List<Direccion> direccionList) {
+        this.direccionList = direccionList;
+    }
+
+    public Provincia getProvinciaId() {
+        return provinciaId;
+    }
+
+    public void setProvinciaId(Provincia provinciaId) {
+        this.provinciaId = provinciaId;
     }
 
     @Override
@@ -67,31 +137,7 @@ public class Localidad implements Serializable {
 
     @Override
     public String toString() {
-        return getNombre();
+        return "entidades.Localidad[ id=" + id + " ]";
     }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getCodigoPostal() {
-        return codigoPostal;
-    }
-
-    public void setCodigoPostal(String codigoPostal) {
-        this.codigoPostal = codigoPostal;
-    }
-
-    public Provincia getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(Provincia provincia) {
-        this.provincia = provincia;
-    }
-
+    
 }

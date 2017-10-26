@@ -6,32 +6,57 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Ariel
  */
 @Entity
-@Table(name = "TIPO_EMPLEADO")
+@Table(name = "tipo_empleado", catalog = "gurasoft", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "TipoEmpleado.findAll", query = "SELECT t FROM TipoEmpleado t"),
+    @NamedQuery(name = "TipoEmpleado.findById", query = "SELECT t FROM TipoEmpleado t WHERE t.id = :id"),
+    @NamedQuery(name = "TipoEmpleado.findByDescripcion", query = "SELECT t FROM TipoEmpleado t WHERE t.descripcion = :descripcion")})
 public class TipoEmpleado implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID", nullable = false)
     private Long id;
-
-    @Column(name = "descripcion")
+    @Size(max = 255)
+    @Column(name = "descripcion", length = 255)
     private String descripcion;
+    @OneToMany(mappedBy = "tipoempleadoId", fetch = FetchType.LAZY)
+    private List<Persona> personaList;
+    @JoinColumn(name = "UNIDAD_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Unidad unidadId;
 
-    @ManyToOne
-    private Unidad unidad;
+    public TipoEmpleado() {
+    }
+
+    public TipoEmpleado(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -39,6 +64,31 @@ public class TipoEmpleado implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    @XmlTransient
+    public List<Persona> getPersonaList() {
+        return personaList;
+    }
+
+    public void setPersonaList(List<Persona> personaList) {
+        this.personaList = personaList;
+    }
+
+    public Unidad getUnidadId() {
+        return unidadId;
+    }
+
+    public void setUnidadId(Unidad unidadId) {
+        this.unidadId = unidadId;
     }
 
     @Override
@@ -63,23 +113,7 @@ public class TipoEmpleado implements Serializable {
 
     @Override
     public String toString() {
-        return getDescripcion();
+        return "entidades.TipoEmpleado[ id=" + id + " ]";
     }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Unidad getUnidad() {
-        return unidad;
-    }
-
-    public void setUnidad(Unidad unidad) {
-        this.unidad = unidad;
-    }
-
+    
 }

@@ -25,40 +25,43 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Ariel
  */
 @Entity
-@Table(name = "deposito", catalog = "gurasoft", schema = "")
+@Table(name = "lista_precio", catalog = "gurasoft", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Deposito.findAll", query = "SELECT d FROM Deposito d"),
-    @NamedQuery(name = "Deposito.findByIdDeposito", query = "SELECT d FROM Deposito d WHERE d.idDeposito = :idDeposito"),
-    @NamedQuery(name = "Deposito.findByDescripcion", query = "SELECT d FROM Deposito d WHERE d.descripcion = :descripcion")})
-public class Deposito implements Serializable {
+    @NamedQuery(name = "ListaPrecio.findAll", query = "SELECT l FROM ListaPrecio l"),
+    @NamedQuery(name = "ListaPrecio.findById", query = "SELECT l FROM ListaPrecio l WHERE l.id = :id"),
+    @NamedQuery(name = "ListaPrecio.findByDescripcion", query = "SELECT l FROM ListaPrecio l WHERE l.descripcion = :descripcion")})
+public class ListaPrecio implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_deposito", nullable = false)
-    private Long idDeposito;
+    @Column(name = "ID", nullable = false)
+    private Long id;
     @Size(max = 255)
     @Column(name = "descripcion", length = 255)
     private String descripcion;
-    @JoinColumn(name = "UNAUNIDAD_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "TIPOCLIENTE_ID", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Unidad unaunidadId;
+    private TipoCliente tipoclienteId;
+    @JoinColumn(name = "UNAEMPRESA_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Empresa unaempresaId;
 
-    public Deposito() {
+    public ListaPrecio() {
     }
 
-    public Deposito(Long idDeposito) {
-        this.idDeposito = idDeposito;
+    public ListaPrecio(Long id) {
+        this.id = id;
     }
 
-    public Long getIdDeposito() {
-        return idDeposito;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdDeposito(Long idDeposito) {
-        this.idDeposito = idDeposito;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescripcion() {
@@ -69,29 +72,37 @@ public class Deposito implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Unidad getUnaunidadId() {
-        return unaunidadId;
+    public TipoCliente getTipoclienteId() {
+        return tipoclienteId;
     }
 
-    public void setUnaunidadId(Unidad unaunidadId) {
-        this.unaunidadId = unaunidadId;
+    public void setTipoclienteId(TipoCliente tipoclienteId) {
+        this.tipoclienteId = tipoclienteId;
+    }
+
+    public Empresa getUnaempresaId() {
+        return unaempresaId;
+    }
+
+    public void setUnaempresaId(Empresa unaempresaId) {
+        this.unaempresaId = unaempresaId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idDeposito != null ? idDeposito.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Deposito)) {
+        if (!(object instanceof ListaPrecio)) {
             return false;
         }
-        Deposito other = (Deposito) object;
-        if ((this.idDeposito == null && other.idDeposito != null) || (this.idDeposito != null && !this.idDeposito.equals(other.idDeposito))) {
+        ListaPrecio other = (ListaPrecio) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -99,7 +110,7 @@ public class Deposito implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Deposito[ idDeposito=" + idDeposito + " ]";
+        return "entidades.ListaPrecio[ id=" + id + " ]";
     }
     
 }

@@ -6,46 +6,92 @@
 package entidades;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import static javax.persistence.DiscriminatorType.STRING;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import static javax.persistence.InheritanceType.SINGLE_TABLE;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Ariel
  */
 @Entity
-@Table(name = "PERSONA")
 @Inheritance(strategy = SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = STRING, length = 20)
 @DiscriminatorValue("PERSONA")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Cliente.findAll", query = "SELECT p FROM Persona p"),
+    @NamedQuery(name = "Cliente.findById", query = "SELECT p FROM Persona p WHERE p.id = :id"),
+    @NamedQuery(name = "Cliente.findByApellido", query = "SELECT p FROM Persona p WHERE p.apellido = :apellido"),
+    @NamedQuery(name = "Cliente.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombre = :nombre"),
+    @NamedQuery(name = "Cliente.findByCuitCuil", query = "SELECT p FROM Persona p WHERE p.cuitCuil = :cuitCuil"),
+    @NamedQuery(name = "Cliente.findByFechaIngreso", query = "SELECT p FROM Persona p WHERE p.fechaIngreso = :fechaIngreso")})
 public abstract class Persona implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    protected static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID", nullable = false)
+    protected Long id;
+        
+    @Size(max = 255)
+    @Column(name = "nombre", length = 255)
+    protected String nombre;
+    
+    @Size(max = 255)
+    @Column(name = "apellido", length = 255)
+    protected String apellido;
+        
+    @ManyToMany(mappedBy = "personaList", fetch = FetchType.LAZY)
+    protected List<Unidad> unidadList;
+        
+    @JoinColumn(name = "DIRECCION_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    protected Direccion direccionId;
+    
+    @JoinColumn(name = "UNAEMPRESA_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    protected Empresa unaempresaId;
+    
+    @JoinColumn(name = "UNIDAD_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    protected Unidad unidadId;
+    
+    @Size(max = 255)
+    @Column(name = "cuitCuil", length = 255)
+    protected String cuitCuil;
 
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "FECHA_INGRESO")
+    @Temporal(TemporalType.DATE)
+    protected Date fechaIngreso;
+    
+    public Persona() {
+    }
 
-    @Column(name = "apellido")
-    private String apellido;
-
-    @ManyToOne
-    private Direccion direccion;
-
-    @ManyToOne
-    private Unidad unidad;
+    public Persona(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -53,6 +99,71 @@ public abstract class Persona implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }    
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    @XmlTransient
+    public List<Unidad> getUnidadList() {
+        return unidadList;
+    }
+
+    public void setUnidadList(List<Unidad> unidadList) {
+        this.unidadList = unidadList;
+    }
+
+    public Direccion getDireccionId() {
+        return direccionId;
+    }
+
+    public void setDireccionId(Direccion direccionId) {
+        this.direccionId = direccionId;
+    }
+
+    public Empresa getUnaempresaId() {
+        return unaempresaId;
+    }
+
+    public void setUnaempresaId(Empresa unaempresaId) {
+        this.unaempresaId = unaempresaId;
+    }
+
+    public Unidad getUnidadId() {
+        return unidadId;
+    }
+
+    public void setUnidadId(Unidad unidadId) {
+        this.unidadId = unidadId;
+    }
+    
+    public String getCuitCuil() {
+        return cuitCuil;
+    }
+
+    public void setCuitCuil(String cuitCuil) {
+        this.cuitCuil = cuitCuil;
+    }
+    
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
     @Override
@@ -65,10 +176,10 @@ public abstract class Persona implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empleado)) {
+        if (!(object instanceof Persona)) {
             return false;
         }
-        Empleado other = (Empleado) object;
+        Persona other = (Persona) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -77,43 +188,7 @@ public abstract class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Persona[ id=" + id + " ]";
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+        return "entidades.Persona[ id=" + id + " ]";
     }
     
-    public Direccion getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(Direccion direccion) {
-        this.direccion = direccion;
-    }
-
-    public Unidad getUnidad() {
-        return unidad;
-    }
-
-    public void setUnidad(Unidad unidad) {
-        this.unidad = unidad;
-    }
-
-    public String getDiscriminatorValue() {
-        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
-    }
-
 }

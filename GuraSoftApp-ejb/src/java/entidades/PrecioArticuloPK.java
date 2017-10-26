@@ -6,7 +6,10 @@
 package entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -15,47 +18,66 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class PrecioArticuloPK implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID_articulo", nullable = false)
+    private long iDarticulo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID_listaDePrecios", nullable = false)
+    private long iDlistaDePrecios;
+
     public PrecioArticuloPK() {
     }
 
-    private Long id_articulo;
-    private Long id_listaDePrecio;
+    public PrecioArticuloPK(long iDarticulo, long iDlistaDePrecios) {
+        this.iDarticulo = iDarticulo;
+        this.iDlistaDePrecios = iDlistaDePrecios;
+    }
+
+    public long getIDarticulo() {
+        return iDarticulo;
+    }
+
+    public void setIDarticulo(long iDarticulo) {
+        this.iDarticulo = iDarticulo;
+    }
+
+    public long getIDlistaDePrecios() {
+        return iDlistaDePrecios;
+    }
+
+    public void setIDlistaDePrecios(long iDlistaDePrecios) {
+        this.iDlistaDePrecios = iDlistaDePrecios;
+    }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id_articulo != null ? id_articulo.hashCode() : 0);
+        hash += (int) iDarticulo;
+        hash += (int) iDlistaDePrecios;
         return hash;
     }
 
     @Override
-    public boolean equals(Object o) {
-        boolean flag = false;
-        PrecioArticuloPK myId = (PrecioArticuloPK) o;
-
-        if ((o instanceof PrecioArticuloPK)
-                && (this.getId_listaDePrecio().equals(myId.getId_listaDePrecio()))
-                && (this.id_articulo == myId.getId_articulo())) {
-            flag = true;
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof PrecioArticuloPK)) {
+            return false;
         }
-        return flag;
-    }
-// rest of the code with getters only
-
-    public Long getId_articulo() {
-        return id_articulo;
-    }
-
-    public void setId_articulo(Long id_articulo) {
-        this.id_articulo = id_articulo;
+        PrecioArticuloPK other = (PrecioArticuloPK) object;
+        if (this.iDarticulo != other.iDarticulo) {
+            return false;
+        }
+        if (this.iDlistaDePrecios != other.iDlistaDePrecios) {
+            return false;
+        }
+        return true;
     }
 
-    public Long getId_listaDePrecio() {
-        return id_listaDePrecio;
+    @Override
+    public String toString() {
+        return "entidades.PrecioArticuloPK[ iDarticulo=" + iDarticulo + ", iDlistaDePrecios=" + iDlistaDePrecios + " ]";
     }
-
-    public void setId_listaDePrecio(Long id_listaDePrecio) {
-        this.id_listaDePrecio = id_listaDePrecio;
-    }
-
+    
 }

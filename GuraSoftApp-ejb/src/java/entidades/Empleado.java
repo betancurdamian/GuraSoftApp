@@ -6,15 +6,18 @@
 package entidades;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,52 +25,44 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @DiscriminatorValue(value = "EMPLEADO")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Empleado.findByType", query = "SELECT e FROM Empleado e WHERE e.tipoempleadoId = :type")})
 public class Empleado extends Persona {
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "FECHA_INGRESO")
-    private Date fechaIngreso;
-
-    @ManyToOne
-    private TipoEmpleado tipoEmpleado;
-
-    @ManyToOne
-    private Usuario unUsuario;
-
-    @Column(name = "cuitCuil")
-    private String cuitCuil;
     
-    public TipoEmpleado getTipoEmpleado() {
-        return tipoEmpleado;
-    }
-
-    public void setTipoEmpleado(TipoEmpleado tipoEmpleado) {
-        this.tipoEmpleado = tipoEmpleado;
-    }
-
-    public Date getFechaIngreso() {
-        return fechaIngreso;
-    }
-
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
-    }
-
-    public Usuario getUnUsuario() {
-        return unUsuario;
-    }
-
-    public void setUnUsuario(Usuario unUsuario) {
-        this.unUsuario = unUsuario;
-    }
-
-    public String getCuitCuil() {
-        return cuitCuil;
-    }
-
-    public void setCuitCuil(String cuitCuil) {
-        this.cuitCuil = cuitCuil;
-    }
-
+    @OneToMany(mappedBy = "empleadoId", fetch = FetchType.LAZY)
+    private List<Venta> ventaList1;
     
+    @JoinColumn(name = "TIPOEMPLEADO_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TipoEmpleado tipoempleadoId;
+    
+    @JoinColumn(name = "UNUSUARIO_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario unusuarioId;
+    
+    @XmlTransient
+    public List<Venta> getVentaList1() {
+        return ventaList1;
+    }
+
+    public void setVentaList1(List<Venta> ventaList1) {
+        this.ventaList1 = ventaList1;
+    }
+
+    public TipoEmpleado getTipoempleadoId() {
+        return tipoempleadoId;
+    }
+
+    public void setTipoempleadoId(TipoEmpleado tipoempleadoId) {
+        this.tipoempleadoId = tipoempleadoId;
+    }
+    
+    public Usuario getUnusuarioId() {
+        return unusuarioId;
+    }
+
+    public void setUnusuarioId(Usuario unusuarioId) {
+        this.unusuarioId = unusuarioId;
+    }    
 }

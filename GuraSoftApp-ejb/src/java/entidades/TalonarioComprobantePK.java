@@ -6,7 +6,10 @@
 package entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -14,47 +17,67 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class TalonarioComprobantePK implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID_TipoCliente", nullable = false)
+    private long iDTipoCliente;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID_Unidad", nullable = false)
+    private long iDUnidad;
+
     public TalonarioComprobantePK() {
     }
 
-    private Long id_Unidad;
-    private Long id_TipoCliente;
+    public TalonarioComprobantePK(long iDTipoCliente, long iDUnidad) {
+        this.iDTipoCliente = iDTipoCliente;
+        this.iDUnidad = iDUnidad;
+    }
+
+    public long getIDTipoCliente() {
+        return iDTipoCliente;
+    }
+
+    public void setIDTipoCliente(long iDTipoCliente) {
+        this.iDTipoCliente = iDTipoCliente;
+    }
+
+    public long getIDUnidad() {
+        return iDUnidad;
+    }
+
+    public void setIDUnidad(long iDUnidad) {
+        this.iDUnidad = iDUnidad;
+    }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id_Unidad != null ? id_Unidad.hashCode() : 0);
+        hash += (int) iDTipoCliente;
+        hash += (int) iDUnidad;
         return hash;
     }
 
     @Override
-    public boolean equals(Object o) {
-        boolean flag = false;
-        TalonarioComprobantePK myId = (TalonarioComprobantePK) o;
-
-        if ((o instanceof TalonarioComprobantePK)
-                && (this.getId_TipoCliente().equals(myId.getId_TipoCliente()))
-                && (this.id_Unidad == myId.getId_Unidad())) {
-            flag = true;
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TalonarioComprobantePK)) {
+            return false;
         }
-        return flag;
+        TalonarioComprobantePK other = (TalonarioComprobantePK) object;
+        if (this.iDTipoCliente != other.iDTipoCliente) {
+            return false;
+        }
+        if (this.iDUnidad != other.iDUnidad) {
+            return false;
+        }
+        return true;
     }
 
-    public Long getId_Unidad() {
-        return id_Unidad;
+    @Override
+    public String toString() {
+        return "entidades.TalonarioComprobantePK[ iDTipoCliente=" + iDTipoCliente + ", iDUnidad=" + iDUnidad + " ]";
     }
-
-    public void setId_Unidad(Long id_Unidad) {
-        this.id_Unidad = id_Unidad;
-    }
-
-    public Long getId_TipoCliente() {
-        return id_TipoCliente;
-    }
-
-    public void setId_TipoCliente(Long id_TipoCliente) {
-        this.id_TipoCliente = id_TipoCliente;
-    }
-    
     
 }

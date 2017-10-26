@@ -7,57 +7,61 @@ package entidades;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Ariel
  */
 @Entity
-@Table(name = "TALONARIO_COMPROBANTE")
-@IdClass(TalonarioComprobantePK.class)
+@Table(name = "talonario_comprobante", catalog = "gurasoft", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "TalonarioComprobante.findAll", query = "SELECT t FROM TalonarioComprobante t"),
+    @NamedQuery(name = "TalonarioComprobante.findByIDTipoCliente", query = "SELECT t FROM TalonarioComprobante t WHERE t.talonarioComprobantePK.iDTipoCliente = :iDTipoCliente"),
+    @NamedQuery(name = "TalonarioComprobante.findByIDUnidad", query = "SELECT t FROM TalonarioComprobante t WHERE t.talonarioComprobantePK.iDUnidad = :iDUnidad"),
+    @NamedQuery(name = "TalonarioComprobante.findByDescripcion", query = "SELECT t FROM TalonarioComprobante t WHERE t.descripcion = :descripcion"),
+    @NamedQuery(name = "TalonarioComprobante.findByNumeracionActual", query = "SELECT t FROM TalonarioComprobante t WHERE t.numeracionActual = :numeracionActual"),
+    @NamedQuery(name = "TalonarioComprobante.findByNumeracionDesde", query = "SELECT t FROM TalonarioComprobante t WHERE t.numeracionDesde = :numeracionDesde"),
+    @NamedQuery(name = "TalonarioComprobante.findByNumeracionHasta", query = "SELECT t FROM TalonarioComprobante t WHERE t.numeracionHasta = :numeracionHasta")})
 public class TalonarioComprobante implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TalonarioComprobantePK talonarioComprobantePK;
+    @Size(max = 255)
+    @Column(name = "descripcion", length = 255)
+    private String descripcion;
+    @Column(name = "numeracion_Actual")
+    private Integer numeracionActual;
+    @Column(name = "numeracion_Desde")
+    private Integer numeracionDesde;
+    @Column(name = "numeracion_Hasta")
+    private Integer numeracionHasta;
 
     public TalonarioComprobante() {
     }
 
-    @Id
-    @Column(name = "ID_Unidad")
-    private Long id_Unidad;
-
-    @Id
-    @Column(name = "ID_TipoCliente")
-    private Long id_TipoCliente;
-
-    @Column(name = "descripcion")
-    private String descripcion;
-    
-    @Column(name = "numeracion_Desde", length = 8)
-    private int numeracion_Desde;
-
-    @Column(name = "numeracion_Hasta", length = 8)
-    private int numeracion_Hasta;
-
-    @Column(name = "numeracion_Actual", length = 8)
-    private int numeracion_Actual;
-
-    public Long getId_Unidad() {
-        return id_Unidad;
+    public TalonarioComprobante(TalonarioComprobantePK talonarioComprobantePK) {
+        this.talonarioComprobantePK = talonarioComprobantePK;
     }
 
-    public void setId_Unidad(Long id_Unidad) {
-        this.id_Unidad = id_Unidad;
+    public TalonarioComprobante(long iDTipoCliente, long iDUnidad) {
+        this.talonarioComprobantePK = new TalonarioComprobantePK(iDTipoCliente, iDUnidad);
     }
 
-    public Long getId_TipoCliente() {
-        return id_TipoCliente;
+    public TalonarioComprobantePK getTalonarioComprobantePK() {
+        return talonarioComprobantePK;
     }
 
-    public void setId_TipoCliente(Long id_TipoCliente) {
-        this.id_TipoCliente = id_TipoCliente;
+    public void setTalonarioComprobantePK(TalonarioComprobantePK talonarioComprobantePK) {
+        this.talonarioComprobantePK = talonarioComprobantePK;
     }
 
     public String getDescripcion() {
@@ -68,30 +72,53 @@ public class TalonarioComprobante implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public int getNumeracion_Desde() {
-        return numeracion_Desde;
+    public Integer getNumeracionActual() {
+        return numeracionActual;
     }
 
-    public void setNumeracion_Desde(int numeracion_Desde) {
-        this.numeracion_Desde = numeracion_Desde;
+    public void setNumeracionActual(Integer numeracionActual) {
+        this.numeracionActual = numeracionActual;
     }
 
-    public int getNumeracion_Hasta() {
-        return numeracion_Hasta;
+    public Integer getNumeracionDesde() {
+        return numeracionDesde;
     }
 
-    public void setNumeracion_Hasta(int numeracion_Hasta) {
-        this.numeracion_Hasta = numeracion_Hasta;
+    public void setNumeracionDesde(Integer numeracionDesde) {
+        this.numeracionDesde = numeracionDesde;
     }
 
-    public int getNumeracion_Actual() {
-        return numeracion_Actual;
+    public Integer getNumeracionHasta() {
+        return numeracionHasta;
     }
 
-    public void setNumeracion_Actual(int numeracion_Actual) {
-        this.numeracion_Actual = numeracion_Actual;
+    public void setNumeracionHasta(Integer numeracionHasta) {
+        this.numeracionHasta = numeracionHasta;
     }
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (talonarioComprobantePK != null ? talonarioComprobantePK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TalonarioComprobante)) {
+            return false;
+        }
+        TalonarioComprobante other = (TalonarioComprobante) object;
+        if ((this.talonarioComprobantePK == null && other.talonarioComprobantePK != null) || (this.talonarioComprobantePK != null && !this.talonarioComprobantePK.equals(other.talonarioComprobantePK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entidades.TalonarioComprobante[ talonarioComprobantePK=" + talonarioComprobantePK + " ]";
+    }
     
 }
