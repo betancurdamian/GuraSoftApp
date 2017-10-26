@@ -3,11 +3,11 @@
     <type>org.netbeans.modules.web.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/web-project/3">
-            <name>GurasoftApps-war</name>
+            <name>GuraSoftApp-war</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="100">
-                    <file>${reference.GurasoftApps-ejb.dist}</file>
+                    <file>${reference.GuraSoftApp-ejb.dist}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
@@ -19,11 +19,11 @@
             </test-roots>
         </data>
         <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
-            <definitions>..\.\nblibraries.properties</definitions>
+            <definitions>..\userLibs\nblibraries.properties</definitions>
         </libraries>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>GurasoftApps-ejb</foreign-project>
+                <foreign-project>GuraSoftApp-ejb</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>dist</target>
