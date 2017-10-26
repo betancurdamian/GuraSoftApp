@@ -28,3 +28,7 @@ hs_err_pid*
 /GurasoftApps-ejb/build/
 /GurasoftApps-ejb/dist/
 /GurasoftApps-war/dist/
+/GuraSoftApp-ejb/build/
+/GuraSoftApp-ejb/dist/
+/GuraSoftApp-war/build/
+/GuraSoftApp-war/dist/
