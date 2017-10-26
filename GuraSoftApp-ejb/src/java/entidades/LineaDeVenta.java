@@ -6,13 +6,12 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,27 +19,24 @@ import javax.persistence.Table;
  * @author Ariel
  */
 @Entity
-@Table(name = "TIPO_USUARIO")
-public class TipoUsuario implements Serializable {
+@Table(name = "LINEA_VENTA")
+public class LineaDeVenta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "descripcion")
-    private String descripcion;
-
-    @OneToMany(mappedBy = "tipoUsuario")
-    private Set<Usuario> usuarios;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    private Venta venta;
+        
+    private Articulo articulo;
+    
+    @Column(name = "cantidad")
+    private int cantidad;
+    
+    @Column(name = "subTotal")
+    private float subTotal;       
 
     @Override
     public int hashCode() {
@@ -52,10 +48,10 @@ public class TipoUsuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoUsuario)) {
+        if (!(object instanceof LineaDeVenta)) {
             return false;
         }
-        TipoUsuario other = (TipoUsuario) object;
+        LineaDeVenta other = (LineaDeVenta) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -64,23 +60,48 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return getDescripcion();
+        return "model.LineaDeVenta[ id=" + id + " ]";
     }
 
-    public String getDescripcion() {
-        return descripcion;
+     public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public Venta getVenta() {
+        return venta;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setVenta(Venta venta) {
+        this.venta = venta;
     }
 
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
+    public int getCantidad() {
+        return cantidad;
     }
 
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
+
+    public float getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(float subTotal) {
+        this.subTotal = subTotal;
+    }
+    
+    
 }

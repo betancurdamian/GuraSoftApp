@@ -7,14 +7,16 @@ package entidades;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import static javax.persistence.DiscriminatorType.STRING;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.Inheritance;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,25 +24,28 @@ import javax.persistence.Table;
  * @author Ariel
  */
 @Entity
-@Table(name = "USUARIO")
-public class Usuario implements Serializable {
+@Table(name = "PERSONA")
+@Inheritance(strategy = SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = STRING, length = 20)
+@DiscriminatorValue("PERSONA")
+public abstract class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    Long id;
 
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "clave")
-    private String clave;
+    @Column(name = "apellido")
+    private String apellido;
 
     @ManyToOne
-    @JoinColumn(name = "id_tipoUsuario")
-    private TipoUsuario tipoUsuario;
+    private Direccion direccion;
 
-    
+    @ManyToOne
+    private Unidad unidad;
 
     public Long getId() {
         return id;
@@ -60,10 +65,10 @@ public class Usuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
+        if (!(object instanceof Empleado)) {
             return false;
         }
-        Usuario other = (Usuario) object;
+        Empleado other = (Empleado) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -72,7 +77,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Usuario[ id=" + id + " ]";
+        return "model.Persona[ id=" + id + " ]";
     }
 
     public String getNombre() {
@@ -83,22 +88,32 @@ public class Usuario implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getClave() {
-        return clave;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setClave(String clave) {
-        this.clave = clave;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
-
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
     
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    public Unidad getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(Unidad unidad) {
+        this.unidad = unidad;
+    }
+
+    public String getDiscriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
 
 }

@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -20,19 +20,20 @@ import javax.persistence.Table;
  * @author Ariel
  */
 @Entity
-@Table(name = "TIPO_USUARIO")
-public class TipoUsuario implements Serializable {
+@Table(name = "ZONA")
+public class Zona implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "nombre")
+    private String nombre;
 
-    @OneToMany(mappedBy = "tipoUsuario")
-    private Set<Usuario> usuarios;
+    //Provincias contenidas en Zonas
+    @ManyToMany(targetEntity = Provincia.class)
+    private Set provincias;
 
     public Long getId() {
         return id;
@@ -52,10 +53,10 @@ public class TipoUsuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoUsuario)) {
+        if (!(object instanceof Zona)) {
             return false;
         }
-        TipoUsuario other = (TipoUsuario) object;
+        Zona other = (Zona) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -64,23 +65,23 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return getDescripcion();
+        return getNombre();
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
+    public Set getProvincias() {
+        return provincias;
     }
 
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
+    public void setProvincias(Set provincias) {
+        this.provincias = provincias;
     }
 
 }

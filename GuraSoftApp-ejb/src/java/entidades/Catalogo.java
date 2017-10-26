@@ -6,7 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,8 +21,8 @@ import javax.persistence.Table;
  * @author Ariel
  */
 @Entity
-@Table(name = "TIPO_USUARIO")
-public class TipoUsuario implements Serializable {
+@Table(name = "CATALOGO_ARTICULO")
+public class Catalogo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -31,8 +32,9 @@ public class TipoUsuario implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "tipoUsuario")
-    private Set<Usuario> usuarios;
+    ///CategoriaProducto que posee el Catalogo
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "unCatalogo")
+    private List<CategoriaDeCatalogo> listaCategoriaCatalogo;
 
     public Long getId() {
         return id;
@@ -52,10 +54,10 @@ public class TipoUsuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoUsuario)) {
+        if (!(object instanceof Catalogo)) {
             return false;
         }
-        TipoUsuario other = (TipoUsuario) object;
+        Catalogo other = (Catalogo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -64,7 +66,15 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return getDescripcion();
+        return "model.CatalogoDeArticulos[ id=" + id + " ]";
+    }
+
+    public List<CategoriaDeCatalogo> getListaCategoriaCatalogo() {
+        return listaCategoriaCatalogo;
+    }
+
+    public void setListaCategoriaCatalogo(List<CategoriaDeCatalogo> listaCategoriaCatalogo) {
+        this.listaCategoriaCatalogo = listaCategoriaCatalogo;
     }
 
     public String getDescripcion() {
@@ -73,14 +83,6 @@ public class TipoUsuario implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
     }
 
 }

@@ -6,12 +6,14 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,8 +22,8 @@ import javax.persistence.Table;
  * @author Ariel
  */
 @Entity
-@Table(name = "TIPO_USUARIO")
-public class TipoUsuario implements Serializable {
+@Table(name = "CATEGORIA_CATALOGO")
+public class CategoriaDeCatalogo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -31,8 +33,12 @@ public class TipoUsuario implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "tipoUsuario")
-    private Set<Usuario> usuarios;
+    @ManyToOne
+    private Catalogo unCatalogo;
+
+    ///Articulos que posee la Catalogoria de Articulos
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "unCategoriaDeCatalogo")
+    private List<Articulo> listaDeArticulos;
 
     public Long getId() {
         return id;
@@ -52,10 +58,10 @@ public class TipoUsuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoUsuario)) {
+        if (!(object instanceof CategoriaDeCatalogo)) {
             return false;
         }
-        TipoUsuario other = (TipoUsuario) object;
+        CategoriaDeCatalogo other = (CategoriaDeCatalogo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -67,20 +73,28 @@ public class TipoUsuario implements Serializable {
         return getDescripcion();
     }
 
+    public Catalogo getUnCatalogo() {
+        return unCatalogo;
+    }
+
+    public void setUnCatalogo(Catalogo unCatalogo) {
+        this.unCatalogo = unCatalogo;
+    }
+
+    public List<Articulo> getListaDeArticulos() {
+        return listaDeArticulos;
+    }
+
+    public void setListaDeArticulos(List<Articulo> listaDeArticulos) {
+        this.listaDeArticulos = listaDeArticulos;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
     }
 
 }

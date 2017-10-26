@@ -6,13 +6,12 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,19 +19,23 @@ import javax.persistence.Table;
  * @author Ariel
  */
 @Entity
-@Table(name = "TIPO_USUARIO")
-public class TipoUsuario implements Serializable {
+@Table(name = "ARTICULO")
+public class Articulo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_articulo")
     private Long id;
 
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "tipoUsuario")
-    private Set<Usuario> usuarios;
+    @ManyToOne
+    private CategoriaDeCatalogo unCategoriaDeCatalogo;
+
+    @ManyToOne
+    private Proveedor unProveedor;
 
     public Long getId() {
         return id;
@@ -52,10 +55,10 @@ public class TipoUsuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoUsuario)) {
+        if (!(object instanceof Articulo)) {
             return false;
         }
-        TipoUsuario other = (TipoUsuario) object;
+        Articulo other = (Articulo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -64,7 +67,7 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return getDescripcion();
+        return "model.Articulo[ id=" + id + " ]";
     }
 
     public String getDescripcion() {
@@ -75,12 +78,20 @@ public class TipoUsuario implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
+    public CategoriaDeCatalogo getUnCategoriaDeCatalogo() {
+        return unCategoriaDeCatalogo;
     }
 
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
+    public void setUnCategoriaDeCatalogo(CategoriaDeCatalogo unCategoriaDeCatalogo) {
+        this.unCategoriaDeCatalogo = unCategoriaDeCatalogo;
+    }
+
+    public Proveedor getUnProveedor() {
+        return unProveedor;
+    }
+
+    public void setUnProveedor(Proveedor unProveedor) {
+        this.unProveedor = unProveedor;
     }
 
 }
